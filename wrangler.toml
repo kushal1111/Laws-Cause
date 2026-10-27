@@ -1,3 +1,10 @@
 name = "laws-and-cause"
-pages_build_output_dir = "dist"
 compatibility_date = "2026-10-27"
+pages_build_output_dir = "dist"
+
+# Used by `npx wrangler deploy` in Cloudflare's Workers Builds pipeline.
+# The dashboard build command must be `npm run build` so this directory exists.
+[assets]
+directory = "./dist"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"

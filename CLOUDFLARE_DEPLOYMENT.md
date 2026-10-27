@@ -57,11 +57,23 @@ Create a repository and push the `main` branch. Do not commit `.env`, `.dev.vars
 
 ## 7. Connect the repository
 
-In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages → Connect to Git**. Choose the GitHub repository.
+In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages → Connect to Git**. Choose the GitHub repository and the `main` branch.
 
 ## 8. Build settings
 
-Use the values at the top of this file. Cloudflare installs devDependencies for the build, which this project needs.
+The current Cloudflare form has two commands. Set both:
+
+| Field                  | Value                 |
+| ---------------------- | --------------------- |
+| Build command          | `npm run build`       |
+| Deploy command         | `npx wrangler deploy` |
+| Build output directory | `dist`                |
+
+`npm run build` has to run before deploy. A log that jumps from `npm clean-install` to `Executing user deploy command: npx wrangler deploy` never created `dist`.
+
+`npx wrangler deploy` publishes a Worker. `wrangler.toml` tells it to upload `./dist`, to serve `about/index.html` for `/about`, and to serve `404.html` for unknown paths. `npx wrangler pages deploy dist` is the older Pages-only command. Do not leave the deploy command as plain `npx wrangler deploy` without the `[assets]` block in `wrangler.toml`. That fails with “Missing entry-point to Worker script or to assets directory”.
+
+Cloudflare installs devDependencies for the build, which this project needs.
 
 Do not add a rewrite of every path to `/index.html`. The build already emits an HTML file for each route. A single-page rewrite would throw away that prerendered HTML. Unknown URLs fall through to `404.html`.
 
@@ -89,6 +101,8 @@ Leave the form in `demo` until the server variables exist. The live page will sa
 In the Pages project, open **Custom domains** and add the domain. Update `VITE_SITE_URL` to that origin, including `https`, and redeploy so the sitemap and canonical tags match the domain.
 
 ## 11. Contact form delivery
+
+`functions/api/contact.ts` is a Pages Function. An assets-only `npx wrangler deploy` publishes the static site and does not upload that function. Leave `VITE_FORM_MODE` as `demo` on this pipeline, or use `endpoint` mode with an external form URL. Switch the Cloudflare project to Pages and deploy with `npx wrangler pages deploy dist` before setting the mode to `function`.
 
 1. Create a free [Resend](https://resend.com) account and verify the domain you will send from.
 2. Create a [Turnstile](https://developers.cloudflare.com/turnstile/) widget for the same domain. The managed widget is enough.
