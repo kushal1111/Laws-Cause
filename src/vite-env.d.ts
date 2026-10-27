@@ -1,0 +1,12 @@
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_SITE_URL?: string;
+  readonly VITE_FORM_MODE?: string;
+  readonly VITE_FORM_ENDPOINT?: string;
+  readonly VITE_TURNSTILE_SITE_KEY?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

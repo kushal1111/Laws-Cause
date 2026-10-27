@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope Variable", "Segoe UI", sans-serif;
+  --font-serif: "Cormorant Garamond Variable", "Palatino Linotype", Palatino, serif;
+  --color-ivory: #f7f5f0;
+  --color-ink: #171c1b;
+  --color-stone: #eae6df;
+  --color-forest: #152b27;
+  --color-forest-deep: #101f1c;
+  --color-gold: #b69a62;
+  --color-gold-deep: #7c6238;
+  --color-muted: #3f4844;
+  --color-line: #d9d7d1;
+  --color-mist: #d5d0c6;
+  --text-display: clamp(2rem, 5.4vw, 5.1rem);
+  --text-display--line-height: 0.92;
+  --text-headline: clamp(2.5rem, 4.8vw, 4.4rem);
+  --text-headline--line-height: 1.02;
+  --text-title: clamp(1.85rem, 2.4vw, 2.65rem);
+  --text-title--line-height: 1.12;
+}
+
+@layer base {
+  html {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-serif {
+    font-optical-sizing: auto;
+  }
+
+  ::selection {
+    background: #152b27;
+    color: #f7f5f0;
+  }
+
+  :focus-visible {
+    outline: 2px solid #152b27;
+    outline-offset: 3px;
+  }
+
+  [data-tone="dark"] :focus-visible {
+    outline-color: #f7f5f0;
+  }
+
+  img,
+  svg {
+    max-width: 100%;
+  }
+}
+
+@layer components {
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4.5rem;
+    z-index: 80;
+    background: #152b27;
+    color: #f7f5f0;
+    padding: 0.75rem 1rem;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  .mobile-nav > summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mobile-nav > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav .menu-close,
+  .mobile-nav[open] .menu-open {
+    display: none;
+  }
+
+  .mobile-nav[open] .menu-close {
+    display: inline;
+  }
+
+  .mobile-nav > .mobile-panel {
+    display: none;
+  }
+
+  .mobile-nav[open] > .mobile-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    background: #152b27;
+    color: #f7f5f0;
+    padding: 6.25rem 1.5rem 2.5rem;
+  }
+
+  .mobile-nav[open] > summary {
+    position: fixed;
+    top: 1rem;
+    right: 1.25rem;
+    z-index: 70;
+    color: #f7f5f0;
+  }
+
+  body:has(.mobile-nav[open]) {
+    overflow: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-rise {
+    animation: hero-rise 500ms ease both;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
