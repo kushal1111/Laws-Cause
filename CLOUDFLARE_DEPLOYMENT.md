@@ -61,17 +61,17 @@ In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages → Co
 
 ## 8. Build settings
 
-The current Cloudflare form has two commands. Set both:
+The current Cloudflare form runs a deploy command and does not run a separate build. Use:
 
 | Field                  | Value                 |
 | ---------------------- | --------------------- |
-| Build command          | `npm run build`       |
+| Build command          | leave empty           |
 | Deploy command         | `npx wrangler deploy` |
 | Build output directory | `dist`                |
 
-`npm run build` has to run before deploy. A log that jumps from `npm clean-install` to `Executing user deploy command: npx wrangler deploy` never created `dist`.
+`wrangler.toml` has a `[build]` command of `npm run build`. Wrangler runs that before it uploads `./dist`, so a log that goes straight from `npm clean-install` to `npx wrangler deploy` still produces the site. Leave the dashboard build command empty. Setting it as well builds the site twice.
 
-`npx wrangler deploy` publishes a Worker. `wrangler.toml` tells it to upload `./dist`, to serve `about/index.html` for `/about`, and to serve `404.html` for unknown paths. `npx wrangler pages deploy dist` is the older Pages-only command. Do not leave the deploy command as plain `npx wrangler deploy` without the `[assets]` block in `wrangler.toml`. That fails with “Missing entry-point to Worker script or to assets directory”.
+`npx wrangler deploy` publishes a Worker. The same file tells it to serve `about/index.html` for `/about` and `404.html` for unknown paths. `npx wrangler pages deploy dist` is the older Pages-only command.
 
 Cloudflare installs devDependencies for the build, which this project needs.
 
